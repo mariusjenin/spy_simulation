@@ -2,48 +2,20 @@ import numpy as np
 import math
 
 from game.utils.vec2 import Vec2
+from .detector import Detector
 
-
-class Camera:
+class Camera(Detector):
 
     def __init__(self, pos, direct, camera_angle_degree=90, max_tick=4, init_tick=0, direct_rotate=1,
                  rotation_degree=90):
-        self.position = pos
-        self.direction = direct  # Vector which indicates movement direction (x, y)
-
+        super().__init__(pos, direct, max_tick, init_tick, direct_rotate, rotation_degree)
         self.camera_rad = camera_angle_degree * math.pi / 180
-        self.min_tick = -1 * max_tick
-        self.max_tick = max_tick
-        self.tick = init_tick  # TODO à revoir car nefonctionne pas avec init_tick != 0
-        self.direct_rotate = direct_rotate
-        self.rotation_rad = rotation_degree * math.pi / 180
-
-    def get_start_stop(self, cell):
-        aligned = False
-
-        if self.position.x < cell.x:
-            start = self.position
-            stop = cell
-        elif self.position.x == cell.x:
-            aligned = True
-
-            if self.position.y < cell.y:
-                start = self.position
-                stop = cell
-            else:
-                start = cell
-                stop = self.position
-        else:
-            start = cell
-            stop = self.position
-
-        return [aligned, start, stop]
 
     @classmethod
     def is_in_bound(cls, v, room_max_v):
         return 0 <= v.x <= room_max_v and 0 <= v.y <= room_max_v
 
-    def generate_cone(self, room):
+    def generate_spotting(self, room):
         # increment (or decrement if direct_rotate is negative) the tick
         self.tick = self.tick + self.direct_rotate
         # Rotation of the direction vector with the angle β
@@ -63,8 +35,12 @@ class Camera:
         vect = self.direction.normalize()
         room_size = len(room.room_boxes[0])
 
-        for i in range(int(-(room_size / 2)), int(room_size / 2)):
-            current_angle = i * self.camera_rad / room_size
+        # for i in range(int(-(room_size / 2) ), int((room_size / 2) ) ):
+        for i in range(int(-room_size), int(room_size)):
+            # current_angle = i * self.camera_rad / (4*room_size)
+            current_angle = i * self.camera_rad / (2 * room_size)
+
+            # print("angle courant: ", current_angle)
             # current_angle = i * math.pi /(4 * room_size)
 
             # Apply rotation to get current vector
@@ -119,3 +95,4 @@ class Camera:
                     index += 1
 
                 current_cell += current_vect
+

@@ -4,6 +4,7 @@ import time
 
 from .room import Room
 from .camera import Camera
+from .laser import Laser
 from .spy import Spy
 from .utils.vec2 import Vec2
 
@@ -18,6 +19,7 @@ class Game:
         self.generate_room_1()
         self.generate_room_2()
         self.generate_room_3()
+        self.generate_room_4()
 
     def run(self):
         self.current = len(self.rooms) - 1
@@ -74,10 +76,10 @@ class Game:
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             ])
 
-        camera_array = [Camera(Vec2(7, 0), Vec2(0, 1), camera_angle_degree=50, max_tick=6, rotation_degree=75)]
+        detector_array = [Camera(Vec2(7, 0), Vec2(0, 1), camera_angle_degree=60, max_tick=6, rotation_degree=90)]
 
         pos_entrance = Vec2(7, 8)
-        room = Room(room_array, pos_entrance, Vec2(1, 1), camera_array)
+        room = Room(room_array, pos_entrance, Vec2(1, 1), detector_array)
         self.rooms.insert(0, room)
 
     def generate_room_2(self):
@@ -101,7 +103,7 @@ class Game:
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             ])
 
-        camera_array = [
+        detector_array = [
             Camera(Vec2(6, 7), Vec2(-1, 0), camera_angle_degree=50, max_tick=11, rotation_degree=120),
             Camera(Vec2(8, 7), Vec2(1, 0), camera_angle_degree=50, max_tick=11, rotation_degree=120),
         ]
@@ -109,7 +111,7 @@ class Game:
         # def __init__(self, pos, direct, max_tick=4, init_tick=0, direct_rotate=1, rotation_degree=90):
 
         pos_entrance = Vec2(7, 13)
-        room = Room(room_array, pos_entrance, Vec2(7, 1), camera_array)
+        room = Room(room_array, pos_entrance, Vec2(7, 1), detector_array)
         self.rooms.insert(0, room)
 
     def generate_room_3(self):
@@ -138,11 +140,34 @@ class Game:
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             ])
 
-        camera_array = [
+        detector_array = [
             Camera(Vec2(14, 0), Vec2(-1, 1), camera_angle_degree=40, max_tick=10, rotation_degree=45),
             Camera(Vec2(19, 5), Vec2(-1, 1), camera_angle_degree=40, max_tick=10, rotation_degree=45)
         ]
 
         pos_entrance = Vec2(1, 18)
-        room = Room(room_array, pos_entrance, Vec2(18, 1), camera_array)
+        room = Room(room_array, pos_entrance, Vec2(18, 1), detector_array)
+        self.rooms.insert(0, room)
+
+
+    def generate_room_4(self):
+        # Generate a simple room with only 1 camera and few walls
+        room_array = np.array(
+            [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+                [0, 1, 1, 1, 1, 0, 1, 1, 1, 0],
+                [0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                [0, 1, 1, 1, 1, 1, 1, 0, 1, 0],
+                [0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                [0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                [0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                [0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ])
+
+        detector_array = [Laser(Vec2(8, 1), Vec2(-1, 1), max_tick=6, rotation_degree=60)]
+
+        pos_entrance = Vec2(8, 8)
+        room = Room(room_array, pos_entrance, Vec2(1, 1), detector_array)
         self.rooms.insert(0, room)

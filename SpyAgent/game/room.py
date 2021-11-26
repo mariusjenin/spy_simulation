@@ -29,13 +29,13 @@ class Room:
         self.cameras = cams
 
     def display(self, spy):
-        char_sep = '|'
+        char_sep = ''
         char_space = " "
         char_wall = " "
         char_exit = " "
         char_spy = "S"
         color_spotted = 'on_red'
-        color_not_spotted = 'on_grey'
+        color_not_spotted = 'on_white'
         color_entrance_exit = "on_green"
         color_spy = "grey"
         color_spy_on_spotted = 'on_red'
@@ -68,14 +68,14 @@ class Room:
                     for k in range(len(self.cameras)):
                         if Vec2.equals(self.cameras[k].position, Vec2(i, j)):
                             # CAMERA
-                            print(char_sep + colored(char_wall + "C" + char_wall, 'red', 'on_white', attrs=['bold']),
+                            print(char_sep + colored(char_wall + "C" + char_wall, 'red', 'on_grey', attrs=['bold']),
                                   end='')
                             done = True
                             break
                     # WALL
                     if not done:
                         print(
-                            char_sep + colored(char_wall + char_wall + char_wall, 'white', 'on_white', attrs=['bold']),
+                            char_sep + colored(char_wall + char_wall + char_wall, 'white', 'on_grey', attrs=['bold']),
                             end='')
             print(char_sep)
 
@@ -101,7 +101,7 @@ class Room:
     def compute_spotting(self):
         self.reset_spotting()
         for cam in self.cameras:
-            cam.generate_cone(self)
+            cam.generate_spotting(self)
         pass
 
     def reset_spotting(self):
